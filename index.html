@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Should We Visit Kenya?</title>
+    <style>
+        /* Reset default browser styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Main body styling with Diani Beach colors (turquoise ocean + white sand + coral + palm green) */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #4dd0e1 0%, #26c6da 25%, #80deea 50%, #b2dfdb 75%, #e0f2f1 100%);
+            color: #2c3e50;
+            padding: 20px;
+        }
+        
+        /* Center container with white sand background */
+        .container {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Main heading */
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            color: #00897b;
+        }
+        
+        /* Question text */
+        .question {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+            font-weight: 300;
+            color: #455a64;
+        }
+        
+        /* Container for both buttons */
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            margin-top: 40px;
+        }
+        
+        /* Base button styling */
+        button {
+            font-size: 1.2em;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        
+        /* YES button - coral/turquoise gradient (ocean sunrise) */
+        #yesBtn {
+            background: linear-gradient(135deg, #ff7e67, #26c6da);
+            color: white;
+            font-size: 1.2em;
+        }
+        
+        #yesBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(255, 126, 103, 0.4);
+        }
+        
+        /* NO button - palm green gradient */
+        #noBtn {
+            background: linear-gradient(135deg, #66bb6a, #4db6ac);
+            color: white;
+            font-size: 1em;
+        }
+        
+        #noBtn:hover {
+            background: linear-gradient(135deg, #4db6ac, #66bb6a);
+        }
+        
+        /* Message that changes with each click */
+        .message {
+            margin-top: 20px;
+            font-size: 1.2em;
+            min-height: 30px;
+            font-style: italic;
+            color: #ff7e67;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            font-weight: 500;
+        }
+        
+        /* Success screen - hidden by default */
+        .success-screen {
+            display: none;
+        }
+        
+        .success-screen.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        /* Fade in animation for success screen */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: scale(0.9); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
+        }
+        
+        /* Large emoji display */
+        .emoji {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="votingScreen">
+            <h1>🇰🇪 Trip to Kenya? 🦁</h1>
+            <p class="question">Should we make Kenya our next adventure destination?</p>
+            
+            <div class="buttons-container">
+                <button id="yesBtn">YES! Let's go to Kenya! 🎉</button>
+                <button id="noBtn">Maybe another destination...</button>
+            </div>
+            
+            <p class="message" id="message"></p>
+        </div>
+        
+        <div class="success-screen" id="successScreen">
+            <div class="emoji">🎉🏖️🌴🌊✨</div>
+            <h1 style="color: #00897b;">AMAZING CHOICE! 🎊</h1>
+            <h2 style="color: #26c6da;">Diani Beach, here we come!</h2>
+            <p style="font-size: 1.3em; margin-top: 30px; color: #455a64;">
+                Get ready for white sand beaches, turquoise waters, and unforgettable adventures!
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let attempts = 0;
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const message = document.getElementById('message');
+        const votingScreen = document.getElementById('votingScreen');
+        const successScreen = document.getElementById('successScreen');
+        
+        const messages = [
+            "Wait... think about the wildlife! 🦒",
+            "But... the Maasai Mara! 🦁",
+            "Imagine the beaches! 🏖️",
+            "Mount Kenya is calling... 🏔️",
+            "The food though! 🍛",
+            "Safari sunset photos! 📸",
+            "Come on, it's going to be amazing! ✨",
+            "You know you want to... 😊",
+            "Just click YES already! 😄"
+        ];
+        
+        // Make YES button bigger and NO button smaller/harder to click
+        noBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            attempts++;
+            
+            // Grow YES button
+            const currentSize = parseFloat(getComputedStyle(yesBtn).fontSize);
+            yesBtn.style.fontSize = (currentSize * 1.2) + 'px';
+            yesBtn.style.padding = (20 + attempts * 5) + 'px ' + (40 + attempts * 10) + 'px';
+            
+            // Shrink NO button
+            const noCurrentSize = parseFloat(getComputedStyle(noBtn).fontSize);
+            noBtn.style.fontSize = (noCurrentSize * 0.85) + 'px';
+            noBtn.style.padding = (20 - attempts * 2) + 'px ' + (40 - attempts * 4) + 'px';
+            
+            // Show message
+            if (attempts <= messages.length) {
+                message.textContent = messages[attempts - 1];
+            }
+            
+            // After 5 attempts, hide NO button
+            if (attempts >= 5) {
+                noBtn.style.display = 'none';
+                message.textContent = "Fine! Only one option left... 😏";
+            }
+        });
+        
+        // YES button clicked
+        yesBtn.addEventListener('click', function() {
+            votingScreen.style.display = 'none';
+            successScreen.classList.add('show');
+        });
+    </script>
+</body>
+</html>
